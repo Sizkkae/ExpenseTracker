@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-gray-900 text-white">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recent Transactions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .nav-link {
+      @apply flex items-center gap-2 px-4 py-2 rounded-lg transition-colors;
+    }
+    .nav-link:hover {
+      @apply bg-gray-700 text-white;
+    }
+    #pieChart,
+    #barChart {
+      max-width: 500px;
+      max-height: 500px;
+    }
+    .chart-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 0;
+    }
+  </style>
+</head>
+<body class="p-6 font-sans space-y-6">
+
+  <!-- 🌐 Navigation -->
+  <nav class="bg-gray-800 p-4 rounded-2xl shadow-lg mb-4">
+    <ul class="flex gap-4 flex-wrap justify-center text-sm text-blue-300">
+      <li><a href="index.html" class="nav-link"><span>🏠</span> Dashboard</a></li>
+      <li><a href="budget.html" class="nav-link"><span>📊</span> Budget</a></li>
+      <li><a href="categorization.html" class="nav-link"><span>🧠</span> Categorization</a></li>
+      <li><a href="split.html" class="nav-link"><span>🔀</span> Split</a></li>
+      <li><a href="recurring.html" class="nav-link"><span>♻️</span> Recurring</a></li>
+      <li><a href="goals.html" class="nav-link"><span>🎯</span> Goals</a></li>
+      <li><a href="currency.html" class="nav-link"><span>🌍</span> Currency</a></li>
+    </ul>
+  </nav>
+
+  <!-- 🧾 Header & Controls -->
+  <header class="flex flex-col md:flex-row md:justify-between gap-4 items-center">
+    <h1 class="text-2xl font-bold text-blue-400">📅 Recent Transactions</h1>
+    <div class="flex gap-2 flex-wrap items-center">
+      <input type="text" id="search" placeholder="Search..." class="bg-gray-800 text-white p-2 rounded border border-gray-700 focus:outline-none focus:border-blue-400" />
+      <select id="filter" class="bg-gray-800 text-white p-2 rounded border border-gray-700 hover:border-blue-400 transition">
+        <option value="7">Last 7 Days</option>
+        <option value="30">Last 30 Days</option>
+      </select>
+      <button onclick="exportCSV()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition">⬇️ Export CSV</button>
+    </div>
+  </header>
+
+  <!-- 📋 Table -->
+  <section class="bg-gray-800 p-4 rounded-2xl shadow-lg overflow-x-auto">
+    <table class="min-w-full text-sm text-left">
+      <thead class="text-blue-400 border-b border-gray-700">
+        <tr>
+          <th class="p-3">Date</th>
+          <th class="p-3">Description</th>
+          <th class="p-3">Category</th>
+          <th class="p-3 text-right">Amount</th>
+        </tr>
+      </thead>
+      <tbody id="transaction-body" class="text-white divide-y divide-gray-700">
+        <!-- Transactions will load here -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 📊 Charts -->
+  <div class="chart-container">
+    <canvas id="pieChart"></canvas>
+    <canvas id="barChart" style="display: none;"></canvas>
+  </div>
+
+  <script>
+    const transactionBody = document.getElementById('transaction-body');
+    const filter = document.getElementById('filter');
+    const searchInput = document.getElementById('search');
+    const pieChart = document.getElementById('pieChart');
+    const barChart = document.getElementById('barChart');
+
+    const transactions = {
+      7: [
+        { date: "2025-04-12", desc: "Uber Eats", category: "Food", amount: -25 },
+        { date: "2025-04-11", desc: "Freelance Payment", category: "Income", amount: 500 },
+        { date: "2025-04-10", desc: "Netflix Subscription", category: "Entertainment", amount: -15.99 },
+        { date: "2025-04-09", desc: "Salary", category: "Income", amount: 2000 },
+        { date: "2025-04-08", desc: "Grocery Store", category: "Groceries", amount: -82.45 },
+      ],
+      30: [
+        { date: "2025-04-07", desc: "Coffee", category: "Food", amount: -4.5 },
+        { date: "2025-04-06", desc: "Amazon Purchase", category: "Shopping", amount: -65 },
+        { date: "2025-04-05", desc: "Restaurant", category: "Food", amount: -40 },
+        { date: "2025-04-04", desc: "Spotify", category: "Entertainment", amount: -9.99 },
+        { date: "2025-04-03", desc: "Insurance Refund", category: "Income", amount: 120 },
+        { date: "2025-04-02", desc: "Gym Membership", category: "Health", amount: -30 },
+        { date: "2025-04-01", desc: "Freelance Bonus", category: "Income", amount: 300 }
+      ]
+    };
+
+    let filteredTransactions = [];
+
+    const renderTransactions = (days) => {
+      const list = [...transactions[7]];
+      if (days == 30) list.push(...transactions[30]);
+      filteredTransactions = list;
+      updateTable();
+      renderGraph();
+    };
+
+    const updateTable = () => {
+      const keyword = searchInput.value.toLowerCase();
+      const list = filteredTransactions.filter(t =>
+        t.desc.toLowerCase().includes(keyword) ||
+        t.category.toLowerCase().includes(keyword) ||
+        t.date.includes(keyword)
+      );
+
+      transactionBody.innerHTML = list.map(t => `
+        <tr>
+          <td class="p-3">${t.date}</td>
+          <td class="p-3">${t.desc}</td>
+          <td class="p-3">${t.category}</td>
+          <td class="p-3 text-right ${t.amount >= 0 ? 'text-green-400' : 'text-red-400'}">
+            ${t.amount >= 0 ? '+' : '-'} $${Math.abs(t.amount).toFixed(2)}
+          </td>
+        </tr>
+      `).join('');
+    };
+
+    const renderGraph = () => {
+      if (Chart.getChart("pieChart")) Chart.getChart("pieChart").destroy();
+      if (Chart.getChart("barChart")) Chart.getChart("barChart").destroy();
+
+      const ctxPie = pieChart.getContext('2d');
+      const ctxBar = barChart.getContext('2d');
+
+      const categories = ['Food', 'Income', 'Entertainment', 'Groceries', 'Shopping', 'Health'];
+      const amounts = categories.map(cat =>
+        filteredTransactions.filter(t => t.category === cat)
+          .reduce((sum, t) => sum + t.amount, 0)
+      );
+
+      if (filter.value == "30") {
+        pieChart.style.display = 'none';
+        barChart.style.display = 'block';
+
+        new Chart(ctxBar, {
+          type: 'bar',
+          data: {
+            labels: categories,
+            datasets: [{
+              label: 'Amount ($)',
+              data: amounts,
+              backgroundColor: ['#ff6f61', '#4caf50', '#2196f3', '#ffeb3b', '#ff9800', '#9c27b0'],
+              borderColor: '#000',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: 'Transaction Categories (Last 30 Days)',
+                font: { size: 18, weight: 'bold' },
+                color: '#fff'
+              },
+              legend: { labels: { color: '#fff' } }
+            },
+            scales: {
+              x: { ticks: { color: '#fff' }, grid: { color: '#444' } },
+              y: { ticks: { color: '#fff' }, grid: { color: '#444' }, beginAtZero: true }
+            }
+          }
+        });
+      } else {
+        barChart.style.display = 'none';
+        pieChart.style.display = 'block';
+
+        new Chart(ctxPie, {
+          type: 'pie',
+          data: {
+            labels: categories,
+            datasets: [{
+              label: 'Spending Categories',
+              data: amounts,
+              backgroundColor: ['#ff6f61', '#4caf50', '#2196f3', '#ffeb3b', '#ff9800', '#9c27b0'],
+              borderColor: '#000',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: 'Transaction Categories (Last 7 Days)',
+                font: { size: 18, weight: 'bold' },
+                color: '#fff'
+              },
+              legend: { labels: { color: '#fff' } }
+            }
+          }
+        });
+      }
+    };
+
+    const exportCSV = () => {
+      const header = ['Date,Description,Category,Amount'];
+      const rows = filteredTransactions.map(t =>
+        `${t.date},"${t.desc}",${t.category},${t.amount}`
+      );
+      const csv = [...header, ...rows].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'transactions.csv';
+      link.click();
+    };
+
+    filter.addEventListener('change', () => renderTransactions(filter.value));
+    searchInput.addEventListener('input', updateTable);
+
+    // Initial render
+    renderTransactions(7);
+  </script>
+
+</body>
+</html>

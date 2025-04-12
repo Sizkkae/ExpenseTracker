@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Perfect Spin Wheel</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0f1115;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      color: white;
+    }
+
+    .wheel-wrapper {
+      position: relative;
+      width: 400px;
+      height: 400px;
+    }
+
+    .wheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      position: relative;
+      border: 8px solid #1a8cff;
+      box-shadow: 0 0 30px #1a8cff99;
+      overflow: hidden;
+      transition: transform 4s ease-out;
+    }
+
+    .slice {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      left: 50%;
+      top: 50%;
+      transform-origin: 0% 0%;
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 20px;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      text-align: right;
+    }
+
+    .slice:nth-child(odd) { background: #1a8cff; }
+    .slice:nth-child(even) { background: #0072e6; }
+
+    .pointer {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-top: 25px solid #ffcc00;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -100%) rotate(180deg); /* Inward */
+      z-index: 10;
+    }
+
+    .spin-button {
+      margin-top: 30px;
+      background: #1a8cff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    .spin-button:hover {
+      background: #0066cc;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #ffcc00;
+      min-height: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wheel-wrapper">
+    <div class="pointer"></div>
+    <div class="wheel" id="wheel">
+      <!-- 8 slices with rotation -->
+      <div class="slice" style="transform: rotate(0deg) skewY(-45deg);">10% OFF</div>
+      <div class="slice" style="transform: rotate(45deg) skewY(-45deg);">Free Gift</div>
+      <div class="slice" style="transform: rotate(90deg) skewY(-45deg);">5% OFF</div>
+      <div class="slice" style="transform: rotate(135deg) skewY(-45deg);">Try Again</div>
+      <div class="slice" style="transform: rotate(180deg) skewY(-45deg);">20% OFF</div>
+      <div class="slice" style="transform: rotate(225deg) skewY(-45deg);">BOGO</div>
+      <div class="slice" style="transform: rotate(270deg) skewY(-45deg);">15% OFF</div>
+      <div class="slice" style="transform: rotate(315deg) skewY(-45deg);">Mystery Box</div>
+    </div>
+  </div>
+
+  <button class="spin-button" onclick="spin()">SPIN</button>
+  <div class="result" id="result"></div>
+
+  <script>
+    const wheel = document.getElementById('wheel');
+    const result = document.getElementById('result');
+    const prizes = [
+      "10% OFF", "Free Gift", "5% OFF", "Try Again",
+      "20% OFF", "BOGO", "15% OFF", "Mystery Box"
+    ];
+
+    let currentDeg = 0;
+    let spinning = false;
+
+    function spin() {
+      if (spinning) return;
+      spinning = true;
+      result.textContent = "";
+
+      const randomIndex = Math.floor(Math.random() * prizes.length);
+      const segmentAngle = 360 / prizes.length;
+      const offset = segmentAngle / 2;
+      const extraSpins = 360 * 5;
+
+       const rotateTo = extraSpins + (360 - randomIndex * segmentAngle - offset);
+      currentDeg += rotateTo;
+
+      wheel.style.transform = `rotate(${currentDeg}deg)`;
+
+      setTimeout(() => {
+        result.textContent = `🎁 You won: ${prizes[randomIndex]}!`;
+        spinning = false;
+      }, 4000);
+    }
+  </script>
+
+</body>
+</html>

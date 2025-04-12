@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary-color: #1a8cff;
+      --bg-color: #f8faff;
+      --card-bg: #ffffff;
+      --text-color: #2c3e50;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .header {
+      position: relative;
+      height: 80px;
+      background-color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: white;
+      box-shadow: var(--box-shadow);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: var(--box-shadow);
+      flex: 1 1 300px;
+      min-height: 120px;
+    }
+
+    .card h3 {
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+
+    .income, .expenses, .balance {
+      font-weight: bold;
+      border: none;
+      background: transparent;
+      font-size: 1rem;
+    }
+
+    .income { color: green; }
+    .expenses { color: red; }
+    .balance { color: var(--primary-color); }
+
+    ul.transactions {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.transactions li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .chart-toggle {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .chart-toggle button, .export-btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      color: #555;
+      font-size: 0.9rem;
+      border-top: 1px solid #eee;
+      margin-top: 40px;
+    }
+
+    #profitLoss {
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      background: transparent;
+      outline: none;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">Dashboard</div>
+  <div class="container">
+    <div class="grid">
+      <div class="card">
+        <h3>Total Income</h3>
+        <input type="number" id="income" value="3000" class="income" />
+      </div>
+      <div class="card">
+        <h3>Total Expenses</h3>
+        <input type="number" id="expenses" value="1250" class="expenses" />
+      </div>
+      <div class="card">
+        <h3>Balance</h3>
+        <input type="text" id="balance" value="" class="balance" readonly />
+      </div>
+      <div class="card">
+        <h3>Profit / Loss</h3>
+        <input type="text" id="profitLoss" value="" readonly />
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 30px;">
+      <h3>Recent Transactions</h3>
+      <ul class="transactions" id="transactionList">
+        <li><input type="text" value="Groceries" /><input type="number" value="-50" class="expenses" /></li>
+        <li><input type="text" value="Salary" /><input type="number" value="1000" class="income" /></li>
+        <li><input type="text" value="Electricity Bill" /><input type="number" value="-120" class="expenses" /></li>
+        <li><input type="text" value="Freelance" /><input type="number" value="300" class="income" /></li>
+      </ul>
+    </div>
+
+    <div class="card" style="margin-top: 30px;">
+      <div class="chart-toggle">
+        <button onclick="loadChart('daily')">Daily</button>
+        <button onclick="loadChart('weekly')">Weekly</button>
+        <button onclick="loadChart('monthly')">Monthly</button>
+      </div>
+      <h3 id="chartTitle">Weekly Expense Overview</h3>
+      <canvas id="chartCanvas" height="200"></canvas>
+    </div>
+
+    <div class="card" style="margin-top: 30px;">
+      <h3>Income vs Expenses Chart</h3>
+      <canvas id="barChartCanvas" height="200"></canvas>
+    </div>
+
+    <div class="card" style="margin-top: 30px;">
+      <h3>Expenses by Category</h3>
+      <canvas id="pieChart" height="200"></canvas>
+    </div>
+
+    <div class="card" style="margin-top: 30px;">
+      <h3>Expense Share</h3>
+      <canvas id="doughnutChart" height="200"></canvas>
+    </div>
+
+    <div style="margin-top: 30px; text-align:right">
+      <button class="export-btn" onclick="exportCSV()">Download CSV</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Expense Tracker. All rights reserved.</p>
+    <p>Built with 💙 by You</p>
+  </footer>
+
+  <script>
+    const incomeInput = document.getElementById('income');
+    const expensesInput = document.getElementById('expenses');
+    const balanceInput = document.getElementById('balance');
+    const profitLossField = document.getElementById('profitLoss');
+    const chartTitle = document.getElementById('chartTitle');
+    const chartCanvas = document.getElementById('chartCanvas');
+    const barChartCanvas = document.getElementById('barChartCanvas');
+    const pieChartCanvas = document.getElementById('pieChart');
+    const doughnutChartCanvas = document.getElementById('doughnutChart');
+
+    function formatCurrency(value) {
+      return "₹" + Number(value).toFixed(2);
+    }
+
+    function updateBalance() {
+      const income = parseFloat(incomeInput.value) || 0;
+      const expenses = parseFloat(expensesInput.value) || 0;
+      const balance = income - expenses;
+
+      balanceInput.value = formatCurrency(balance);
+
+      if (income > expenses) {
+        profitLossField.value = `Profit: ${formatCurrency(balance)}`;
+        profitLossField.style.color = 'green';
+      } else if (expenses > income) {
+        profitLossField.value = `Loss: ${formatCurrency(-balance)}`;
+        profitLossField.style.color = 'red';
+      } else {
+        profitLossField.value = `Break-even`;
+        profitLossField.style.color = '#333';
+      }
+
+      updateBarChart(income, expenses);
+      loadPieChart();
+      loadDoughnutChart();
+    }
+
+    incomeInput.addEventListener('input', updateBalance);
+    expensesInput.addEventListener('input', updateBalance);
+    updateBalance();
+
+    let chart;
+    let barChart;
+    let pieChart;
+    let doughnutChart;
+
+    function loadChart(type) {
+      const dataSets = {
+        daily: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], data: [20,45,35,50,30,25,60] },
+        weekly: { labels: ['Week 1','Week 2','Week 3','Week 4'], data: [300,420,390,510] },
+        monthly: { labels: ['Jan','Feb','Mar','Apr','May','Jun'], data: [1200,950,1100,990,1050,1230] }
+      };
+
+      const chartData = dataSets[type];
+      chartTitle.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} Expense Overview`;
+
+      if (chart) chart.destroy();
+
+      chart = new Chart(chartCanvas.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: chartData.labels,
+          datasets: [{
+            label: 'Expenses',
+            data: chartData.data,
+            fill: false,
+            borderColor: '#1a8cff',
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    }
+
+    function updateBarChart(income, expenses) {
+      if (barChart) barChart.destroy();
+      barChart = new Chart(barChartCanvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['Income', 'Expenses'],
+          datasets: [{
+            label: 'Amount',
+            data: [income, expenses],
+            backgroundColor: ['green', 'red']
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true } },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    function loadPieChart() {
+      if (pieChart) pieChart.destroy();
+      pieChart = new Chart(pieChartCanvas.getContext('2d'), {
+        type: 'pie',
+        data: {
+          labels: ['Groceries', 'Electricity Bill', 'Others'],
+          datasets: [{
+            data: [50, 120, 1080],
+            backgroundColor: ['#ff6384', '#36a2eb', '#ffce56']
+          }]
+        }
+      });
+    }
+
+    function loadDoughnutChart() {
+      if (doughnutChart) doughnutChart.destroy();
+      doughnutChart = new Chart(doughnutChartCanvas.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Groceries', 'Electricity', 'Transport', 'Entertainment'],
+          datasets: [{
+            data: [150, 200, 100, 100],
+            backgroundColor: ['#ff9f40', '#4bc0c0', '#9966ff', '#ff6384']
+          }]
+        }
+      });
+    }
+
+    function exportCSV() {
+      let csv = 'Category,Amount\n';
+      csv += `Income,${incomeInput.value}\n`;
+      csv += `Expenses,${expensesInput.value}\n`;
+      csv += `Balance,${balanceInput.value}\n`;
+      csv += `${profitLossField.value}\n\n`;
+      csv += 'Transactions\nDescription,Amount\n';
+      const items = document.querySelectorAll('#transactionList li');
+      items.forEach(li => {
+        const desc = li.querySelector('input[type="text"]').value;
+        const amt = li.querySelector('input[type="number"]').value;
+        csv += `${desc},${amt}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'expense_report.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    loadChart('weekly');
+    loadPieChart();
+    loadDoughnutChart();
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

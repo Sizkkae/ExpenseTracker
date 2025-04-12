@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expenso - Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'georgia', cursive;
+      height: 100vh;
+      background: #0f0f2d;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header */
+    header {
+      width: 100%;
+      height: 80px;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .logo-container img {
+      width: 40px;
+      height: 40px;
+      animation: pulse 2s infinite;
+    }
+    .logo-container h1 {
+      font-size: 2rem;
+      color: #00ffff;
+      text-shadow: 0 0 3px #00ffff;
+      transition: 0.3s ease;
+    }
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+    .nav-buttons button {
+      background: none;
+      border: 2px solid #00ffff;
+      color: #00ffff;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+      font-size: 1rem;
+    }
+    .nav-buttons button:hover {
+      background: #00ffff;
+      color: #000;
+      box-shadow: 0 0 20px #00ffff;
+    }
+
+    /* Main Container */
+    .container {
+      width: 100%;
+      flex: 1;
+      display: flex;
+    }
+
+    .side {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: flex 0.5s ease;
+      color: white;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .side.left {
+      background-color: #0a0a23;
+    }
+    .side.right {
+      background-color: #1a8cff;
+    }
+    .side:hover {
+      flex: 1.2;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+      z-index: 2;
+    }
+
+    .title {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .bubble {
+      background: white;
+      color: black;
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .avatar {
+      background: #fff;
+      border-radius: 20px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .avatar img {
+      width: 120px;
+      height: 120px;
+      border-radius: 20px;
+    }
+    .text-line {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    .action-btn {
+      background: white;
+      color: black;
+      padding: 0.7rem 1.5rem;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
+    .action-btn:hover {
+      background: #ffde59;
+    }
+    .bottom-sticker {
+      position: absolute;
+      bottom: 10px;
+      width: 80px;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.1);
+      background: white;
+      color: black;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      z-index: 100;
+      opacity: 0;
+      transition: 0.3s ease;
+    }
+    .modal.active {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .modal h2 {
+      margin-bottom: 1rem;
+    }
+    .modal input {
+      padding: 0.5rem;
+      width: 100%;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    .modal button {
+      padding: 0.5rem 1rem;
+      background: #1a8cff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7);
+      }
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px 10px rgba(0, 255, 255, 0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <img src="https://cdn-icons-png.flaticon.com/512/3482/3482340.png" alt="Expenso Logo">
+      <h1>Expenso</h1>
+    </div>
+    <div class="nav-buttons">
+      <button>About</button>
+      <button>Features</button>
+      <button>Contact</button>
+    </div>
+  </header>
+
+  <!-- Welcome Split Section -->
+  <div class="container">
+    <div class="side left" onclick="toggleModal('loginModal')">
+      <div class="title">Hello</div>
+      <div class="bubble">Welcome again</div>
+      <div class="avatar">
+        <img src="toggle.jpg" alt="Avatar" />
+      </div>
+      <div class="text-line">Hey there, welcome back!</div>
+      <a href="login.html"><div class="action-btn">Login</div></a>
+      <img class="bottom-sticker" src="https://cdn-icons-png.flaticon.com/512/616/616408.png" />
+    </div>
+    <div class="side right" onclick="toggleModal('signupModal')">
+      <div class="title">Hello</div>
+      <div class="bubble">New here?</div>
+      <div class="avatar">
+        <img src="toggle2.jpg" alt="Avatar" />
+      </div>
+      <div class="text-line">Let’s create your account</div>
+      <a href="signup.html"><div class="action-btn">Signup</div></a>
+      <img class="bottom-sticker" src="https://cdn-icons-png.flaticon.com/512/616/616409.png" />
+    </div>
+  </div>
+
+  <!-- Login Modal
+  <div class="modal" id="loginModal">
+    <h2>Login</h2>
+    <input type="text" placeholder="Username" />
+    <input type="password" placeholder="Password" />
+    <button onclick="closeModal('loginModal')">Login</button>
+  </div>
+
+
+  <div class="modal" id="signupModal">
+    <h2>Sign Up</h2>
+    <input type="text" placeholder="Username" />
+    <input type="email" placeholder="Email" />
+    <input type="password" placeholder="Password" />
+    <button onclick="closeModal('signupModal')">Register</button>
+  </div>*/ -->
+
+  <script>
+    function toggleModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+  </script>
+</body>
+</html>
