@@ -1,31 +1,148 @@
-<!-- Budget Planning -->
-<section class="bg-gray-800 p-6 rounded-2xl shadow-lg">
-    <h2 class="text-xl font-semibold mb-4 text-blue-400">📊 Budget Planning</h2>
-    <form class="space-y-4">
-      <div>
-        <label class="block mb-1">Category</label>
-        <input type="text" class="w-full p-2 rounded bg-gray-700" placeholder="e.g., Food, Travel" />
+<!DOCTYPE html>
+<html lang="en" class="bg-gray-900 text-white">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Budget Planning</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .icon-button {
+      background-color: #ff6f61;
+      border-radius: 50%;
+      padding: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+    }
+    .icon-button:hover {
+      background-color: #e65c49;
+    }
+
+    .goal-card.completed {
+      opacity: 0.5;
+      transform: scale(0.97);
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .goal-card.completed::after {
+      content: "✅ Completed";
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: #22c55e;
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+    }
+
+    .badge {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .badge:hover {
+      transform: rotate(-2deg) scale(1.1);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body class="p-6 font-sans space-y-6 bg-gray-900">
+
+  <!-- 🌐 Navigation -->
+  <nav class="bg-gray-800 p-4 rounded-2xl shadow-lg mb-4">
+    <ul class="flex gap-4 flex-wrap justify-center text-sm text-blue-300">
+      <li><a href="index.html" class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors hover:bg-gray-700 hover:text-white"><span>🏠</span> Dashboard</a></li>
+      <li><a href="budget.html" class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors hover:bg-gray-700 hover:text-white"><span>📊</span> Budget</a></li>
+      <li><a href="categorization.html" class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors hover:bg-gray-700 hover:text-white"><span>🧠</span> Categorization</a></li>
+      <li><a href="split.html" class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors hover:bg-gray-700 hover:text-white"><span>🔀</span> Split</a></li>
+      <li><a href="goals.html" class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors hover:bg-gray-700 hover:text-white"><span>🎯</span> Goals</a></li>
+    </ul>
+  </nav>
+
+  <!-- 💰 Budget Header -->
+  <header class="flex flex-col md:flex-row md:justify-between gap-4 items-center">
+    <h1 class="text-3xl font-bold text-blue-400">💸 Budget Planning</h1>
+  </header>
+
+  <!-- 📈 Budget Overview -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg">
+    <h2 class="text-xl font-semibold text-blue-300">Overview</h2>
+    <div class="grid grid-cols-2 gap-6 mt-4">
+      <div class="bg-blue-700 p-4 rounded-lg">
+        <h3 class="font-medium text-white">Income</h3>
+        <input class="text-2xl text-green-400 bg-transparent w-full outline-none" value="$3,000" />
       </div>
-      <div>
-        <label class="block mb-1">Budget Amount</label>
-        <input type="number" class="w-full p-2 rounded bg-gray-700" />
+      <div class="bg-red-700 p-4 rounded-lg">
+        <h3 class="font-medium text-white">Expenses</h3>
+        <input class="text-2xl text-red-400 bg-transparent w-full outline-none" value="$1,500" />
       </div>
-      <div>
-        <label class="block mb-1">Duration</label>
-        <select class="w-full p-2 rounded bg-gray-700">
-          <option>Weekly</option>
-          <option>Monthly</option>
-        </select>
+      <div class="bg-green-700 p-4 rounded-lg">
+        <h3 class="font-medium text-white">Savings</h3>
+        <input class="text-2xl text-green-400 bg-transparent w-full outline-none" value="$1,000" />
       </div>
-      <button class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded">Set Budget</button>
-    </form>
-  
-    <!-- Budget Progress (example) -->
-    <div class="mt-6">
-      <p>🍔 Food – $180 / $200</p>
-      <div class="w-full bg-gray-700 rounded-full h-4">
-        <div class="bg-yellow-400 h-4 rounded-full" style="width: 90%;"></div>
+      <div class="bg-yellow-700 p-4 rounded-lg">
+        <h3 class="font-medium text-white">Budget Left</h3>
+        <input class="text-2xl text-yellow-400 bg-transparent w-full outline-none" value="$500" />
       </div>
     </div>
   </section>
-  
+
+  <!-- 🏆 Budget Streaks with Funky Hover -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg">
+    <h2 class="text-xl font-semibold text-blue-300">🎉 Budget Streaks</h2>
+    <div class="flex flex-wrap gap-4 mt-4 text-sm">
+      <span class="badge bg-green-700 px-4 py-2 rounded-full shadow text-white">🔥 3-Day Budget Boss</span>
+      <span class="badge bg-purple-700 px-4 py-2 rounded-full shadow text-white">💎 1-Week Saver Streak</span>
+      <span class="badge bg-pink-700 px-4 py-2 rounded-full shadow text-white">🧊 No-Spend Ninja (Weekend)</span>
+    </div>
+  </section>
+
+  <!-- 🎯 Budget Goals -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg mt-6">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold text-blue-300">Set Your Goals</h2>
+      <button onclick="addGoal()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition-all">➕ Add Goal</button>
+    </div>
+    <div id="goalContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="goal-card bg-green-600 p-4 rounded-lg text-center space-y-2">
+        <input type="text" value="🌍" class="text-white text-3xl w-full text-center emoji-input bg-transparent outline-none" />
+        <input type="text" value="Travel Fund" class="text-white font-bold w-full text-center bg-transparent outline-none" />
+        <input type="text" value="$1,000 Goal" class="text-white w-full text-center bg-transparent outline-none" />
+        <div class="bg-gray-600 h-2 rounded-full">
+          <div class="bg-green-400 h-2 rounded-full" style="width: 70%;"></div>
+        </div>
+        <button onclick="markCompleted(this)" class="mt-2 bg-white text-gray-900 px-3 py-1 rounded-full text-sm hover:bg-green-300 transition-all">✅ Mark as Completed</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function addGoal() {
+      const container = document.getElementById("goalContainer");
+
+      const newCard = document.createElement("div");
+      newCard.className = "goal-card bg-purple-600 p-4 rounded-lg text-center space-y-2";
+      newCard.innerHTML = `
+        <input type="text" value="🎯" class="text-white text-3xl w-full text-center emoji-input bg-transparent outline-none" />
+        <input type="text" value="New Goal" class="text-white font-bold w-full text-center bg-transparent outline-none" />
+        <input type="text" value="$0 Goal" class="text-white w-full text-center bg-transparent outline-none" />
+        <div class="bg-gray-600 h-2 rounded-full">
+          <div class="bg-purple-400 h-2 rounded-full" style="width: 0%;"></div>
+        </div>
+        <button onclick="markCompleted(this)" class="mt-2 bg-white text-gray-900 px-3 py-1 rounded-full text-sm hover:bg-green-300 transition-all">✅ Mark as Completed</button>
+      `;
+      container.appendChild(newCard);
+    }
+
+    function markCompleted(btn) {
+      const card = btn.closest('.goal-card');
+      card.classList.toggle('completed');
+    }
+  </script>
+
+</body>
+</html>

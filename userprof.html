@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-gray-900 text-white">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Animation classes */
+    .fade-in {
+      animation: fadeIn 1s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-in-left {
+      animation: slideInLeft 1s ease-out forwards;
+    }
+
+    @keyframes slideInLeft {
+      0% {
+        opacity: 0;
+        transform: translateX(-100px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s ease-out;
+    }
+
+    .scroll-reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body class="p-6 bg-gray-900 font-sans">
+
+  <!-- 🌐 Navigation -->
+  <nav class="bg-gray-800 p-4 rounded-2xl shadow-lg mb-6">
+    <ul class="flex gap-4 flex-wrap justify-center text-sm text-blue-300">
+      <li><a href="index.html" class="px-4 py-2 rounded-lg hover:bg-gray-700 hover:text-white transition"><span>🏠</span> Dashboard</a></li>
+      <li><a href="budget.html" class="px-4 py-2 rounded-lg hover:bg-gray-700 hover:text-white transition"><span>📊</span> Budget</a></li>
+      <li><a href="shared-wallets.html" class="px-4 py-2 rounded-lg hover:bg-gray-700 hover:text-white transition"><span>👨‍👩‍👧‍👦</span> Shared Wallets</a></li>
+      <li><a href="profile.html" class="px-4 py-2 rounded-lg bg-blue-600 text-white"><span>👤</span> Profile</a></li>
+    </ul>
+  </nav>
+
+  <!-- 🧾 User Profile Header -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg flex flex-col items-center space-y-4 mb-8">
+    <!-- Display the profile picture -->
+    <img id="profilePic" src="profile-pic.jpg" alt="Profile Picture" class="w-32 h-32 rounded-full object-cover shadow-lg">
+    <h2 class="text-3xl font-bold text-blue-300">John Doe</h2>
+    <p class="text-lg text-gray-400">User since January 2022</p>
+    <a href="editprof.html"><button  class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl transition font-semibold shadow-md">Edit Profile</button></a>
+  </section>
+
+  <!-- 🏠 User Details Section -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg space-y-6 mb-8">
+    <h3 class="text-2xl font-semibold text-blue-300 slide-in-left">Personal Information</h3>
+    <div class="space-y-4">
+      <p><strong class="text-white">Full Name:</strong> John Doe</p>
+      <p><strong class="text-white">Email:</strong> john.doe@example.com</p>
+      <p><strong class="text-white">Phone:</strong> +1 234 567 890</p>
+      <p><strong class="text-white">Location:</strong> New York, USA</p>
+    </div>
+  </section>
+
+  <!-- 📊 Wallet Details Section -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg space-y-6 mb-8">
+    <h3 class="text-2xl font-semibold text-blue-300 slide-in-left">Wallet Details</h3>
+    <div class="space-y-4">
+      <p><strong class="text-white">Primary Wallet:</strong> Wallet #1</p>
+      <p><strong class="text-white">Balance:</strong> $2,340.50</p>
+      <p><strong class="text-white">Currency:</strong> USD</p>
+      <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-semibold">View Transactions</button>
+    </div>
+  </section>
+
+  <!-- 📈 Activity History Section -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg space-y-6 mb-8">
+    <h3 class="text-2xl font-semibold text-blue-300 slide-in-left">Activity History</h3>
+    <div class="space-y-4">
+      <div class="bg-gray-700 p-4 rounded-xl">
+        <p class="text-white"><strong>January 15, 2025</strong> - Added funds: $500.00</p>
+      </div>
+      <div class="bg-gray-700 p-4 rounded-xl">
+        <p class="text-white"><strong>January 10, 2025</strong> - Expense: Coffee - $5.50</p>
+      </div>
+      <div class="bg-gray-700 p-4 rounded-xl">
+        <p class="text-white"><strong>January 5, 2025</strong> - Expense: Grocery - $50.00</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⚙️ Settings Section -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg space-y-6 mb-8">
+    <h3 class="text-2xl font-semibold text-blue-300 slide-in-left">Account Settings</h3>
+    <div class="space-y-4">
+      <p class="text-white">Change your password, privacy settings, and notification preferences.</p>
+      <button class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-xl text-sm font-semibold">Change Password</button>
+      <button class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-xl text-sm font-semibold">Privacy Settings</button>
+    </div>
+  </section>
+
+  <!-- 📝 Footer Section -->
+  <footer class="bg-gray-800 p-6 rounded-2xl shadow-lg mt-8">
+    <p class="text-center text-sm text-gray-500">© 2025 WalletApp. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Scroll Reveal
+    const scrollElements = document.querySelectorAll('.scroll-reveal');
+    const checkScroll = () => {
+      const triggerBottom = window.innerHeight / 5 * 4;
+      scrollElements.forEach(el => {
+        const elementTop = el.getBoundingClientRect().top;
+        if (elementTop < triggerBottom) {
+          el.classList.add('show');
+        } else {
+          el.classList.remove('show');
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', checkScroll);
+    checkScroll();
+
+    // Example of dynamically updating the profile picture (this would be done after form submission in a real app)
+    // Assuming the profile picture is updated on the server and you retrieve the URL or base64 data
+    const savedProfilePicUrl = "saved-profile-pic.jpg"; // replace with dynamic URL from server or local storage
+    document.getElementById("profilePic").src = savedProfilePicUrl; // Update the profile picture source
+  </script>
+</body>
+</html>

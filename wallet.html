@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-gray-900 text-white">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shared Wallets</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-6 font-sans space-y-6 bg-gray-900">
+
+  <!-- 🌐 Navigation -->
+  <nav class="bg-gray-800 p-4 rounded-2xl shadow-lg mb-6">
+    <ul class="flex gap-4 flex-wrap justify-center text-sm text-blue-300">
+      <li><a href="index.html" class="px-4 py-2 rounded-lg hover:bg-gray-700 hover:text-white transition"><span>🏠</span> Dashboard</a></li>
+      <li><a href="budget.html" class="px-4 py-2 rounded-lg hover:bg-gray-700 hover:text-white transition"><span>📊</span> Budget</a></li>
+      <li><a href="shared-wallets.html" class="px-4 py-2 rounded-lg bg-blue-600 text-white"><span>👨‍👩‍👧</span> Shared Wallets</a></li>
+    </ul>
+  </nav>
+
+  <!-- 🧾 Header -->
+  <header class="flex flex-col md:flex-row md:justify-between gap-4 items-center">
+    <h1 class="text-3xl font-bold text-blue-400">👨‍👩‍👧 Shared Wallets</h1>
+  </header>
+
+  <!-- ➕ Create Wallet -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg space-y-4">
+    <h2 class="text-xl font-semibold text-blue-300">Create a New Shared Wallet</h2>
+    <form id="walletForm" class="grid gap-4 md:grid-cols-2">
+      <input type="text" id="walletName" placeholder="Wallet Name" required class="bg-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <input type="email" id="inviteEmail" placeholder="Invite Email" required class="bg-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <button type="submit" class="col-span-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl transition font-semibold shadow-md">
+        ➕ Create Wallet
+      </button>
+    </form>
+  </section>
+
+  <!-- 📂 Wallet List -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg mt-6 space-y-6">
+    <h2 class="text-xl font-semibold text-blue-300">Your Shared Wallets</h2>
+    <div id="walletList" class="space-y-4"></div>
+  </section>
+
+  <script>
+    const form = document.getElementById("walletForm");
+    const walletList = document.getElementById("walletList");
+
+    function loadWallets() {
+      const wallets = JSON.parse(localStorage.getItem("wallets") || "[]");
+      walletList.innerHTML = "";
+
+      wallets.forEach((wallet, index) => {
+        const members = wallet.members.join(", ");
+        const card = document.createElement("div");
+        card.className = "bg-gray-700 p-4 rounded-xl flex flex-col gap-3 shadow-md hover:shadow-lg transition";
+
+        card.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-lg font-bold text-white">${wallet.name}</h3>
+              <p class="text-sm text-gray-300">Members: ${members}</p>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="manageWallet(${index})" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">Manage</button>
+              <button onclick="deleteWallet(${index})" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">Delete</button>
+              <button onclick="toggleChat(${index})" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">Chat 💬</button>
+            </div>
+          </div>
+          <div class="chat-box bg-gray-800 p-3 rounded-lg space-y-2 hidden" id="chat-${index}">
+            <div class="messages space-y-1" id="chat-messages-${index}"></div>
+            <div class="flex gap-2 mt-2">
+              <input type="text" id="chat-input-${index}" class="flex-1 bg-gray-600 text-white p-2 rounded-md" placeholder="Type a message...">
+              <button onclick="sendMessage(${index})" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-md">Send</button>
+            </div>
+          </div>
+        `;
+
+        walletList.appendChild(card);
+      });
+    }
+
+    function toggleChat(index) {
+      const chat = document.getElementById(`chat-${index}`);
+      chat.classList.toggle("hidden");
+    }
+
+    function sendMessage(index) {
+      const input = document.getElementById(`chat-input-${index}`);
+      const msgContainer = document.getElementById(`chat-messages-${index}`);
+      const text = input.value.trim();
+      if (!text) return;
+
+      const msg = document.createElement("div");
+      msg.className = "text-green-400 text-sm text-right";
+      msg.textContent = `You: ${text}`;
+      msgContainer.appendChild(msg);
+
+      input.value = "";
+
+      setTimeout(() => {
+        const reply = document.createElement("div");
+        reply.className = "text-blue-400 text-sm text-left";
+        reply.textContent = `Teammate: Got it!`;
+        msgContainer.appendChild(reply);
+        msgContainer.scrollTop = msgContainer.scrollHeight;
+      }, 1000);
+
+      msgContainer.scrollTop = msgContainer.scrollHeight;
+    }
+
+    function deleteWallet(index) {
+      const wallets = JSON.parse(localStorage.getItem("wallets") || "[]");
+      wallets.splice(index, 1);
+      localStorage.setItem("wallets", JSON.stringify(wallets));
+      loadWallets();
+    }
+
+    function manageWallet(index) {
+      const wallets = JSON.parse(localStorage.getItem("wallets") || "[]");
+      const wallet = wallets[index];
+      alert(`Managing wallet: ${wallet.name}\nMembers: ${wallet.members.join(", ")}`);
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("walletName").value.trim();
+      const email = document.getElementById("inviteEmail").value.trim();
+
+      if (!name || !email) return alert("Please fill in all fields.");
+
+      const wallets = JSON.parse(localStorage.getItem("wallets") || "[]");
+      wallets.push({ name, members: ["you@example.com", email] });
+      localStorage.setItem("wallets", JSON.stringify(wallets));
+
+      form.reset();
+      loadWallets();
+    });
+
+    // Load wallets on page load
+    loadWallets();
+  </script>
+</body>
+</html>

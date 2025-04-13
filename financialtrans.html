@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-[#1a1a2e] text-white">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,15 +11,17 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Fredoka One', cursive;
+      font-family: 'georgia', cursive;
     }
+
     body {
       display: flex;
-      background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
-      color: #1a1a1a;
+      background-color: #1a1a2e;
+      color: white;
       height: 100vh;
       overflow: hidden;
     }
+
     .sidebar {
       width: 220px;
       background: #000814;
@@ -28,12 +30,14 @@
       flex-direction: column;
       padding: 20px;
     }
+
     .sidebar h2 {
       font-size: 1.8rem;
       margin-bottom: 30px;
       color: #ff9f1c;
       text-align: center;
     }
+
     .nav-item {
       margin: 15px 0;
       cursor: pointer;
@@ -42,14 +46,17 @@
       gap: 10px;
       transition: 0.3s;
     }
+
     .nav-item:hover {
       color: #ff9f1c;
     }
+
     .main {
       flex: 1;
       padding: 30px;
       overflow-y: auto;
     }
+
     .header {
       display: flex;
       justify-content: space-between;
@@ -57,10 +64,12 @@
       flex-wrap: wrap;
       gap: 10px;
     }
+
     .header h1 {
       font-size: 2rem;
-      color: #14213d;
+      color: #3b82f6; /* text-blue-400 */
     }
+
     .btn-group button {
       background: #ff9f1c;
       color: white;
@@ -73,108 +82,143 @@
       transition: 0.3s;
       margin-left: 10px;
     }
+
     .btn-group button:hover {
       background: #fca311;
     }
+
     .cards {
       display: flex;
       gap: 20px;
       margin: 30px 0;
       flex-wrap: wrap;
     }
+
     .card {
       flex: 1;
-      background: white;
+      background: #14213d;
       padding: 20px;
       border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       min-width: 220px;
     }
+
+    .progress-bar {
+      background: #2d2d4a;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-bar div {
+      height: 10px;
+      background: #ff9f1c;
+    }
+
     .card h3 {
       font-size: 1rem;
-      color: #6c757d;
+      color: #a1a1aa;
     }
+
     .card h2 {
       font-size: 1.5rem;
       margin-top: 10px;
+      color: white;
     }
+
     .section {
       margin-top: 30px;
     }
+
     .section h2 {
       font-size: 1.5rem;
       margin-bottom: 15px;
-      color: #14213d;
+      color: #3b82f6;
     }
+
     .expense-list {
-      background: white;
+      background: #14213d;
       border-radius: 20px;
       padding: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       max-height: 250px;
       overflow-y: auto;
     }
+
     .expense-item {
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;
       padding-bottom: 10px;
-      border-bottom: 1px dashed #ccc;
+      border-bottom: 1px dashed #555;
     }
+
     .modal {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.1);
-      background: white;
+      background: #14213d;
       padding: 30px;
       border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
       z-index: 100;
       width: 90%;
       max-width: 400px;
       opacity: 0;
       transition: 0.3s ease;
     }
+
     .modal.active {
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
     }
+
     .modal input, .modal select {
       width: 100%;
       padding: 10px;
       margin-bottom: 15px;
-      border: 1px solid #ccc;
+      border: none;
+      background: #1f2937;
+      color: white;
       border-radius: 10px;
     }
+
     .modal button {
       padding: 10px 20px;
-      background: #14213d;
+      background: #3b82f6;
       color: white;
       border: none;
       border-radius: 10px;
       cursor: pointer;
     }
+
     .overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.4);
       display: none;
       z-index: 99;
     }
+
     .overlay.active {
       display: block;
     }
+
     canvas {
       max-width: 500px;
       margin: 0 auto;
-      background: white;
+      background: #14213d;
       border-radius: 20px;
       padding: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    ::placeholder {
+      color: #aaa;
     }
   </style>
 </head>
@@ -186,12 +230,13 @@
     <div class="nav-item">💸 Expenses</div>
     <div class="nav-item">📅 Calendar</div>
   </div>
+
   <div class="main">
     <div class="header">
       <h1>Financial Dashboard</h1>
       <div class="btn-group">
         <button onclick="openModal()">+ Add Expense</button>
-        <button onlick="rectrans.html">🕓 Recent Transactions</button>
+        <button onclick="downloadCSV()">⬇ Download CSV</button>
       </div>
     </div>
 
@@ -211,21 +256,24 @@
       <h2>Budget Overview</h2>
       <div class="card">
         <h3>Food Budget: $500</h3>
-        <h2>Spent: $120</h2>
+        <h2 id="food-spent">Spent: $0</h2>
+        <div class="progress-bar"><div id="food-progress" style="width: 0%"></div></div>
       </div>
     </div>
 
     <div class="section">
       <h2>Recent Expenses</h2>
+      <input type="text" id="searchBox" placeholder="Search by category..." oninput="filterExpenses()" style="padding: 10px; border-radius: 10px; margin-bottom: 10px; width: 100%; background: #1f2937; color: white;">
       <div class="expense-list" id="expense-log">
         <div class="expense-item"><em>No expenses yet.</em></div>
       </div>
     </div>
   </div>
 
+  <!-- Expense Modal -->
   <div class="overlay" id="overlay" onclick="closeModal()"></div>
   <div class="modal" id="expenseModal">
-    <h2>Add Expense</h2>
+    <h2 class="text-blue-400 mb-4">Add Expense</h2>
     <input type="text" id="desc" placeholder="Description" />
     <input type="number" id="amount" placeholder="Amount" />
     <select id="category">
@@ -243,6 +291,7 @@
 
   <script>
     let totalExpense = 0;
+    let expenseData = [];
     const chartData = { Food: 0, Grocery: 0, Clothing: 0, Travel: 0, Entertainment: 0, Healthcare: 0 };
 
     const ctx = document.getElementById('expenseChart').getContext('2d');
@@ -264,10 +313,12 @@
       document.getElementById("expenseModal").classList.add("active");
       document.getElementById("overlay").classList.add("active");
     }
+
     function closeModal() {
       document.getElementById("expenseModal").classList.remove("active");
       document.getElementById("overlay").classList.remove("active");
     }
+
     function addExpense() {
       const desc = document.getElementById("desc").value;
       const amount = parseFloat(document.getElementById("amount").value);
@@ -288,6 +339,7 @@
 
       const div = document.createElement("div");
       div.className = "expense-item";
+      div.setAttribute('data-category', category);
       div.innerHTML = `<div>${desc} (${category})</div><div>$${amount.toFixed(2)} <small style="font-size: 0.8em;">on ${new Date(datetime).toLocaleString()}</small></div>`;
       log.prepend(div);
 
@@ -295,11 +347,39 @@
       expenseChart.data.datasets[0].data = Object.values(chartData);
       expenseChart.update();
 
+      if (category === "Food") {
+        document.getElementById("food-spent").innerText = `Spent: $${chartData["Food"]}`;
+        const percent = Math.min((chartData["Food"] / 500) * 100, 100);
+        document.getElementById("food-progress").style.width = `${percent}%`;
+      }
+
+      expenseData.push({ desc, amount, category, datetime });
+
       closeModal();
       document.getElementById("desc").value = "";
       document.getElementById("amount").value = "";
       document.getElementById("category").selectedIndex = 0;
       document.getElementById("datetime").value = "";
+    }
+
+    function downloadCSV() {
+      let csv = "Description,Amount,Category,DateTime\n";
+      expenseData.forEach(e => {
+        csv += `${e.desc},${e.amount},${e.category},${new Date(e.datetime).toLocaleString()}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "expenses.csv";
+      link.click();
+    }
+
+    function filterExpenses() {
+      const value = document.getElementById("searchBox").value.toLowerCase();
+      document.querySelectorAll(".expense-item").forEach(item => {
+        const category = item.getAttribute("data-category").toLowerCase();
+        item.style.display = category.includes(value) ? "flex" : "none";
+      });
     }
   </script>
 </body>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expenso - Smart Expense Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleUp {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      0% { opacity: 0; transform: translateX(-30px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes bounce-fade {
+      0%, 100% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(-10px); opacity: 0.8; }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 1.5s ease-out forwards;
+    }
+
+    .animate-scale-up {
+      animation: scaleUp 1s ease-out forwards;
+    }
+
+    .animate-slide-in {
+      animation: slideIn 1s ease-out forwards;
+    }
+
+    .animate-bounce-fade {
+      animation: bounce-fade 2s infinite;
+    }
+
+    .cover-title {
+      animation: slideIn 2s ease-in-out forwards;
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; transform: scale(0.95); visibility: hidden; }
+    }
+
+    .cover-hidden {
+      animation: fadeOut 1s forwards;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(() => {
+        document.getElementById("cover").classList.add("cover-hidden");
+      }, 3000);
+    });
+  </script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white overflow-x-hidden">
+
+  <!-- Cover Title -->
+  <section id="cover" class="fixed inset-0 z-50 h-screen flex items-center justify-center text-center bg-gradient-to-tr from-black via-gray-900 to-gray-800 transition-all duration-1000">
+    <h1 class="text-7xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-yellow-400 to-purple-500 cover-title animate-fade-in">
+      Expenso
+    </h1>
+  </section>
+
+  <!-- Main Content -->
+  <div class="relative z-10">
+    <!-- Navbar -->
+    <nav class="flex items-center justify-between px-6 py-4 bg-gray-900 shadow-lg border-b border-gray-700">
+      <h1 class="text-3xl font-bold text-pink-400 animate-bounce-fade">Expenso</h1>
+      <div class="flex items-center gap-6">
+        <div class="hidden md:flex gap-4">
+          <a href="#features" class="text-gray-300 hover:text-pink-400 font-semibold transition-colors animate-slide-in">Features</a>
+          <a href="#install" class="text-gray-300 hover:text-pink-400 font-semibold transition-colors animate-slide-in">Install</a>
+          <a href="aboutus.html" class="text-gray-300 hover:text-pink-400 font-semibold transition-colors animate-slide-in">About</a>
+        </div>
+        <a href="logsignfinal.html" class="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-400 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg hover:scale-105 transition-transform duration-300 animate-scale-up">
+          ➕ Create Account
+        </a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="flex flex-col items-center justify-center text-center py-24 px-6">
+      <h2 class="text-5xl font-extrabold text-pink-400 mb-4 animate-fade-in">Track Your Expenses in Style!</h2>
+      <p class="text-lg text-gray-300 max-w-xl mb-6 animate-fade-in">
+        Expenso brings a fun and powerful way to manage your money. Analyze, plan, and rule your finances like a boss.
+      </p>
+      <a href="#features" class="px-8 py-4 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-400 text-white text-lg font-bold rounded-full shadow-xl transform hover:scale-110 transition-transform duration-300 animate-scale-up">
+        🚀 Explore Features
+      </a>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-gray-800 rounded-3xl mx-4 md:mx-16 my-8 mt-24">
+      <div class="text-center mb-12">
+        <h3 class="text-4xl font-bold text-pink-300 animate-fade-in">💡 What Makes Expenso Awesome?</h3>
+        <p class="text-gray-400 mt-2 text-lg animate-fade-in">Check out our exciting, funky features built to supercharge your budgeting journey!</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 px-6">
+        <a href="financialtrans.html" target="_blank" class="bg-gray-700 p-6 rounded-2xl shadow-xl hover:scale-105 hover:shadow-pink-400/40 transition-transform duration-300">
+          <h4 class="text-2xl font-bold mb-2 text-yellow-300 animate-fade-in">🎯 Add Your Expense</h4>
+          <p class="text-gray-300 animate-fade-in">Instantly log your expenses with colorful categories and emojis!</p>
+        </a>
+        <a href="rectrans.html" target="_blank" class="bg-gray-700 p-6 rounded-2xl shadow-xl hover:scale-105 hover:shadow-pink-400/40 transition-transform duration-300">
+          <h4 class="text-2xl font-bold mb-2 text-pink-300 animate-fade-in">📊 Transaction History</h4>
+          <p class="text-gray-300 animate-fade-in">Visualize your spending with vibrant graphs and charts, while tracking logs from daily to yearly.</p>
+        </a>
+        <a href="budget.html" target="_blank" class="bg-gray-700 p-6 rounded-2xl shadow-xl hover:scale-105 hover:shadow-pink-400/40 transition-transform duration-300">
+          <h4 class="text-2xl font-bold mb-2 text-green-300 animate-fade-in">🧠 Smart Budgeting</h4>
+          <p class="text-gray-300 animate-fade-in">Set spending limits, receive alerts, and gamify your savings goals with fun challenges!</p>
+        </a>
+        <a href="wallet.html" target="_blank" class="bg-gray-700 p-6 rounded-2xl shadow-xl hover:scale-105 hover:shadow-pink-400/40 transition-transform duration-300">
+          <h4 class="text-2xl font-bold mb-2 text-blue-400 animate-fade-in">🌐 SplitShare</h4>
+          <p class="text-gray-300 animate-fade-in">Manage shared expenses with family or roommates using a collaborative wallet and built-in chat.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Install Section -->
+    <section id="install" class="text-center py-16 px-6">
+      <h3 class="text-4xl font-bold text-yellow-300 mb-4 animate-fade-in">📲 Install Expenso Now!</h3>
+      <p class="text-gray-400 mb-8 text-lg animate-fade-in">Add it to your home screen and get ready to vibe with your budget!</p>
+      <a href="#" target="_blank" class="px-8 py-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-white text-lg font-bold rounded-full shadow-xl transform hover:scale-110 transition-transform duration-300 animate-scale-up">
+        📥 Add to Home Screen
+      </a>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="text-center py-16 px-6 bg-gray-800 rounded-3xl mx-4 md:mx-16 my-8">
+      <h3 class="text-4xl font-bold text-purple-400 mb-4 animate-fade-in">🙌 About Us</h3>
+      <p class="text-gray-300 text-lg max-w-2xl mx-auto animate-fade-in">
+        Expenso is built by a team of passionate developers who believe budgeting should be fun, easy, and empowering.
+        Our mission is to help you take charge of your finances without the stress.
+      </p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-center py-6 text-gray-400 mt-12" id="contact">
+      <p>&copy; 2025 Expenso. Made with 💖 to make money fun.</p>
+      <div class="flex justify-center space-x-6 mt-6">
+        <a href="https://www.instagram.com" target="_blank" class="text-pink-500 hover:text-pink-400 animate-bounce-fade">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram" class="h-8 w-8" />
+        </a>
+        <a href="https://www.twitter.com" target="_blank" class="text-blue-400 hover:text-blue-300 animate-bounce-fade">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/60/Twitter_Logo_as_of_2021.svg" alt="Twitter" class="h-8 w-8" />
+        </a>
+        <a href="mailto:support@expenso.com" target="_blank" class="text-red-500 hover:text-red-400 animate-bounce-fade">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/Google_Gmail_logo_2020.svg" alt="Gmail" class="h-8 w-8" />
+        </a>
+        <a href="https://www.facebook.com" target="_blank" class="text-blue-600 hover:text-blue-500 animate-bounce-fade">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" class="h-8 w-8" />
+        </a>
+        <a href="#contact" class="text-gray-300 hover:text-pink-400 animate-bounce-fade">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/63/Font_Awesome_5_solid_envelope.svg" alt="Contact Us" class="h-8 w-8" />
+        </a>
+        <a href="#about" class="text-gray-300 hover:text-pink-400 animate-bounce-fade">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Information_icon.svg" alt="About Us" class="h-8 w-8" />
+        </a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

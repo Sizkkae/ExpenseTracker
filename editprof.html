@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-gray-900 text-white">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Animation classes */
+    .fade-in {
+      animation: fadeIn 1s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s ease-out;
+    }
+
+    .scroll-reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body class="p-6 bg-gray-900 font-sans">
+
+  <!-- 🌐 Navigation (only Profile link) -->
+  <nav class="bg-gray-800 p-4 rounded-2xl shadow-lg mb-6">
+    <ul class="flex gap-4 flex-wrap justify-center text-sm text-blue-300">
+      <li><a href="profile.html" class="px-4 py-2 rounded-lg bg-blue-600 text-white"><span>👤</span> Profile</a></li>
+    </ul>
+  </nav>
+
+  <!-- 🧾 Edit Profile Header -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg flex flex-col items-center space-y-4 mb-8">
+    <h2 class="text-3xl font-bold text-blue-300">Edit Profile</h2>
+    <p class="text-lg text-gray-400">Update your personal information below</p>
+  </section>
+
+  <!-- 📝 Edit Profile Form -->
+  <section class="bg-gray-800 p-6 rounded-2xl shadow-lg space-y-6 mb-8">
+    <form id="editProfileForm" class="space-y-4">
+      <!-- Profile Photo -->
+      <div class="flex flex-col items-center">
+        <label for="profilePhoto" class="block text-sm font-semibold text-gray-300 mb-2">Profile Photo</label>
+        <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*"
+               class="bg-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+               onchange="previewImage(event)">
+        <div class="mt-4">
+          <img id="profilePicPreview" src="" alt="Profile Picture Preview" class="w-32 h-32 rounded-full object-cover hidden">
+        </div>
+      </div>
+
+      <!-- Full Name -->
+      <div>
+        <label for="fullName" class="block text-sm font-semibold text-gray-300">Full Name</label>
+        <input type="text" id="fullName" name="fullName" placeholder="John Doe"
+               class="w-full bg-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-semibold text-gray-300">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="john.doe@example.com"
+               class="w-full bg-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label for="phone" class="block text-sm font-semibold text-gray-300">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="+1 234 567 890"
+               class="w-full bg-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-semibold text-gray-300">New Password</label>
+        <input type="password" id="password" name="password" placeholder="New Password"
+               class="w-full bg-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Confirm Password -->
+      <div>
+        <label for="confirmPassword" class="block text-sm font-semibold text-gray-300">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password"
+               class="w-full bg-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Save Changes Button -->
+      <button type="submit"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl transition font-semibold shadow-md w-full">
+        Save Changes
+      </button>
+    </form>
+  </section>
+
+  <!-- 📝 Footer Section -->
+  <footer class="bg-gray-800 p-6 rounded-2xl shadow-lg mt-8">
+    <p class="text-center text-sm text-gray-500">© 2025 WalletApp. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Scroll Reveal
+    const scrollElements = document.querySelectorAll('.scroll-reveal');
+    const checkScroll = () => {
+      const triggerBottom = window.innerHeight / 5 * 4;
+      scrollElements.forEach(el => {
+        const elementTop = el.getBoundingClientRect().top;
+        if (elementTop < triggerBottom) {
+          el.classList.add('show');
+        } else {
+          el.classList.remove('show');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', checkScroll);
+    checkScroll();
+
+    // Preview profile picture when user selects a file
+    function previewImage(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const image = document.getElementById('profilePicPreview');
+        image.src = e.target.result;
+        image.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Handle form submission (for demonstration purposes)
+    document.getElementById("editProfileForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      alert("Your profile has been updated successfully!");
+    });
+  </script>
+
+</body>
+</html>
